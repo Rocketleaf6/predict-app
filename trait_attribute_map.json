@@ -1,0 +1,525 @@
+{
+  "Contractor Control Ability": {
+    "Authority": 0.3,
+    "Dominance": 0.25,
+    "Enforcement Ability": 0.25,
+    "Emotional Stability": 0.2
+  },
+  "Workforce Control Ability": {
+    "Authority": 0.3,
+    "Enforcement Ability": 0.3,
+    "Dominance": 0.2,
+    "Consistency": 0.2
+  },
+  "Disciplinary Enforcement": {
+    "Enforcement Ability": 0.4,
+    "Authority": 0.3,
+    "Consistency": 0.2,
+    "Aggression": 0.1
+  },
+  "Rule Enforcement": {
+    "Enforcement Ability": 0.4,
+    "Integrity": 0.3,
+    "Consistency": 0.3
+  },
+  "Corruption Resistance": {
+    "Integrity": 0.5,
+    "Consistency": 0.3,
+    "Emotional Stability": 0.2
+  },
+  "Confidentiality": {
+    "Integrity": 0.5,
+    "Obedience": 0.3,
+    "Consistency": 0.2
+  },
+  "Financial Honesty": {
+    "Integrity": 0.6,
+    "Consistency": 0.25,
+    "Detail Precision": 0.15
+  },
+  "Loyalty to Employer": {
+    "Loyalty": 0.5,
+    "Obedience": 0.3,
+    "Integrity": 0.2
+  },
+  "Political Neutrality": {
+    "Politics Safe": 0.6,
+    "Integrity": 0.2,
+    "Emotional Stability": 0.2
+  },
+  "Leadership Ability": {
+    "Authority": 0.3,
+    "Assertiveness": 0.3,
+    "Dominance": 0.2,
+    "Risk Appetite": 0.2
+  },
+  "Decision Making Ability": {
+    "Strategy": 0.3,
+    "Authority": 0.3,
+    "Risk Appetite": 0.2,
+    "Emotional Stability": 0.2
+  },
+  "Crisis Leadership": {
+    "Authority": 0.3,
+    "Emotional Stability": 0.3,
+    "Aggression": 0.2,
+    "Strategy": 0.2
+  },
+  "Task Completion Reliability": {
+    "Execution": 0.5,
+    "Consistency": 0.3,
+    "Obedience": 0.2
+  },
+  "Deadline Reliability": {
+    "Execution": 0.4,
+    "Consistency": 0.4,
+    "Emotional Stability": 0.2
+  },
+  "Operational Discipline": {
+    "Consistency": 0.4,
+    "Execution": 0.3,
+    "Integrity": 0.3
+  },
+  "Emotional Control": {
+    "Emotional Stability": 0.6,
+    "Consistency": 0.4
+  },
+  "Stress Tolerance": {
+    "Emotional Stability": 0.6,
+    "Consistency": 0.2,
+    "Authority": 0.2
+  },
+  "Impulse Control": {
+    "Emotional Stability": 0.5,
+    "Integrity": 0.3,
+    "Consistency": 0.2
+  },
+  "Problem Solving Ability": {
+    "Analytical": 0.5,
+    "Strategy": 0.3,
+    "Execution": 0.2
+  },
+  "Strategic Thinking": {
+    "Strategy": 0.6,
+    "Analytical": 0.4
+  },
+  "Planning Ability": {
+    "Strategy": 0.5,
+    "Consistency": 0.3,
+    "Execution": 0.2
+  },
+  "Instruction Compliance": {
+    "Obedience": 0.5,
+    "Consistency": 0.3,
+    "Execution": 0.2
+  },
+  "Assertive Communication": {
+    "Assertiveness": 0.6,
+    "Communication": 0.4
+  },
+  "Persuasion Ability": {
+    "Communication": 0.5,
+    "Assertiveness": 0.3,
+    "Authority": 0.2
+  },
+  "Authority Presence": {
+    "Authority": 0.6,
+    "Dominance": 0.4
+  },
+  "Command Capability": {
+    "Authority": 0.4,
+    "Enforcement Ability": 0.3,
+    "Dominance": 0.3
+  },
+  "Control Orientation": {
+    "Dominance": 0.4,
+    "Authority": 0.3,
+    "Aggression": 0.3
+  },
+  "Risk Taking Ability": {
+    "Risk Appetite": 0.6,
+    "Authority": 0.2,
+    "Assertiveness": 0.2
+  },
+  "Calculated Risk Ability": {
+    "Risk Appetite": 0.4,
+    "Strategy": 0.4,
+    "Analytical": 0.2
+  },
+  "Ownership Mentality": {
+    "Ownership": 0.6,
+    "Consistency": 0.4
+  },
+  "Responsibility Acceptance": {
+    "Ownership": 0.5,
+    "Integrity": 0.3,
+    "Consistency": 0.2
+  },
+  "Attention to Detail": {
+    "Detail Precision": 0.7,
+    "Consistency": 0.3
+  },
+  "Quality Orientation": {
+    "Detail Precision": 0.5,
+    "Consistency": 0.3,
+    "Integrity": 0.2
+  },
+  "Work Ethic": {
+    "Execution": 0.4,
+    "Consistency": 0.4,
+    "Integrity": 0.2
+  },
+  "Reliability": {
+    "Consistency": 0.5,
+    "Integrity": 0.3,
+    "Execution": 0.2
+  },
+  "Compliance Orientation": {
+    "Obedience": 0.5,
+    "Integrity": 0.3,
+    "Consistency": 0.2
+  },
+  "Supervisory Ability": {
+    "Authority": 0.3,
+    "Enforcement Ability": 0.3,
+    "Dominance": 0.2,
+    "Consistency": 0.2
+  },
+  "Hierarchy Respect": {
+    "Obedience": 0.5,
+    "Integrity": 0.3,
+    "Consistency": 0.2
+  },
+  "Follow Through Ability": {
+    "Execution": 0.5,
+    "Consistency": 0.3,
+    "Ownership": 0.2
+  },
+  "Independent Thinking": {
+    "Analytical": 0.4,
+    "Strategy": 0.4,
+    "Risk Appetite": 0.2
+  },
+  "Conflict Handling": {
+    "Emotional Stability": 0.4,
+    "Authority": 0.3,
+    "Assertiveness": 0.3
+  },
+  "Negotiation Ability": {
+    "Communication": 0.4,
+    "Strategy": 0.3,
+    "Assertiveness": 0.3
+  },
+  "Organizational Ability": {
+    "Consistency": 0.4,
+    "Strategy": 0.3,
+    "Execution": 0.3
+  },
+  "Focus Stability": {
+    "Consistency": 0.5,
+    "Emotional Stability": 0.3,
+    "Execution": 0.2
+  },
+  "Self Motivation": {
+    "Ownership": 0.4,
+    "Execution": 0.3,
+    "Risk Appetite": 0.3
+  },
+  "Persistence": {
+    "Consistency": 0.5,
+    "Execution": 0.3,
+    "Authority": 0.2
+  },
+  "Learning Ability": {
+    "Analytical": 0.4,
+    "Ownership": 0.3,
+    "Execution": 0.3
+  },
+  "Adaptability": {
+    "Emotional Stability": 0.4,
+    "Analytical": 0.3,
+    "Execution": 0.3
+  },
+  "Initiative": {
+    "Ownership": 0.4,
+    "Execution": 0.3,
+    "Risk Appetite": 0.3
+  },
+  "Situational Awareness": {
+    "Analytical": 0.4,
+    "Emotional Stability": 0.3,
+    "Politics Safe": 0.3
+  },
+  "Time Management": {
+    "Discipline": 0.5,
+    "Execution": 0.3,
+    "Consistency": 0.2
+  },
+  "Creativity in Cooking": {
+    "Execution": 0.4,
+    "Analytical": 0.3,
+    "Ownership": 0.3
+  },
+  "Food Safety Awareness": {
+    "Detail Precision": 0.5,
+    "Execution": 0.3,
+    "Discipline": 0.2
+  },
+  "Ingredient Knowledge": {
+    "Detail Precision": 0.5,
+    "Analytical": 0.4,
+    "Discipline": 0.1
+  },
+  "Adaptability to Dietary Needs": {
+    "Detail Precision": 0.75,
+    "Communication": 0.25000000000000006
+  },
+  "Food Safety Knowledge": {
+    "Detail Precision": 0.6,
+    "Execution": 0.3,
+    "Discipline": 0.1
+  },
+  "Creativity in Menu Planning": {
+    "Strategy": 0.625,
+    "Analytical": 0.37499999999999994
+  },
+  "Adaptability to Dietary Restrictions": {
+    "Communication": 0.625,
+    "Execution": 0.37499999999999994
+  },
+  "Efficiency in Kitchen Workflow": {
+    "Execution": 0.6,
+    "Discipline": 0.3,
+    "Communication": 0.1
+  },
+  "Ingredient Quality Assessment": {
+    "Analytical": 0.6,
+    "Detail Precision": 0.3,
+    "Execution": 0.1
+  },
+  "Menu Planning": {
+    "Strategy": 0.5,
+    "Analytical": 0.3,
+    "Detail Precision": 0.2
+  },
+  "Food Safety Compliance": {
+    "Detail Precision": 0.5,
+    "Discipline": 0.3,
+    "Enforcement Ability": 0.2
+  },
+  "Ingredient Sourcing": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.3,
+    "Execution": 0.2
+  },
+  "Kitchen Equipment Proficiency": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Discipline": 0.1
+  },
+  "Client Relationship Management": {
+    "Communication": 0.5,
+    "Loyalty": 0.3,
+    "Emotional Stability": 0.2
+  },
+  "Team Leadership": {
+    "Ownership": 0.5,
+    "Authority": 0.3,
+    "Communication": 0.2
+  },
+  "Sales Acumen": {
+    "Communication": 0.5,
+    "Strategy": 0.3,
+    "Assertiveness": 0.2
+  },
+  "Operational Agility": {
+    "Execution": 0.5,
+    "Strategy": 0.3,
+    "Discipline": 0.2
+  },
+  "Change Management": {
+    "Strategy": 0.5,
+    "Communication": 0.3,
+    "Execution": 0.2
+  },
+  "Business Development": {
+    "Communication": 0.5,
+    "Strategy": 0.3,
+    "Ownership": 0.2
+  },
+  "Negotiation Skills": {
+    "Communication": 0.5,
+    "Strategy": 0.3,
+    "Assertiveness": 0.2
+  },
+  "Technical Troubleshooting": {
+    "Analytical": 0.6,
+    "Execution": 0.3,
+    "Detail Precision": 0.1
+  },
+  "Safety Compliance": {
+    "Discipline": 0.5,
+    "Enforcement Ability": 0.3,
+    "Consistency": 0.2
+  },
+  "Equipment Maintenance": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Discipline": 0.1
+  },
+  "System Installation": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Ownership": 0.1
+  },
+  "Blueprint Interpretation": {
+    "Detail Precision": 0.6,
+    "Analytical": 0.3,
+    "Discipline": 0.1
+  },
+  "Customer Interaction": {
+    "Communication": 0.6,
+    "Emotional Stability": 0.3,
+    "Ownership": 0.1
+  },
+  "Preventive Maintenance": {
+    "Discipline": 0.5,
+    "Detail Precision": 0.3,
+    "Ownership": 0.2
+  },
+  "Tool Proficiency": {
+    "Execution": 0.5,
+    "Discipline": 0.3,
+    "Detail Precision": 0.2
+  },
+  "Emergency Response": {
+    "Execution": 0.5,
+    "Discipline": 0.3,
+    "Emotional Stability": 0.2
+  },
+  "Code Knowledge": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.3,
+    "Execution": 0.2
+  },
+  "Customer Service Orientation": {
+    "Communication": 0.5,
+    "Emotional Stability": 0.3,
+    "Ownership": 0.2
+  },
+  "Technical Knowledge of Electrical and Plumbing Systems": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.4,
+    "Execution": 0.1
+  },
+  "Problem Diagnosis and Troubleshooting": {
+    "Analytical": 0.5,
+    "Execution": 0.3,
+    "Detail Precision": 0.2
+  },
+  "Safety Compliance and Risk Awareness": {
+    "Discipline": 0.5,
+    "Risk Appetite": 0.3,
+    "Detail Precision": 0.2
+  },
+  "Equipment Maintenance and Repair Skills": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Ownership": 0.1
+  },
+  "Time Management for Job Scheduling": {
+    "Discipline": 0.5,
+    "Execution": 0.3,
+    "Consistency": 0.2
+  },
+  "Adaptability to Varied Work Environments": {
+    "Execution": 0.4,
+    "Consistency": 0.3,
+    "Integrity": 0.3
+  },
+  "Talent Networking": {
+    "Communication": 0.6,
+    "Strategy": 0.3,
+    "Politics Safe": 0.1
+  },
+  "Candidate Assessment": {
+    "Analytical": 0.5,
+    "Communication": 0.3,
+    "Detail Precision": 0.2
+  },
+  "Market Insight": {
+    "Analytical": 0.5,
+    "Strategy": 0.4,
+    "Communication": 0.1
+  },
+  "Employer Branding": {
+    "Communication": 0.5,
+    "Strategy": 0.3,
+    "Execution": 0.2
+  },
+  "Stakeholder Collaboration": {
+    "Communication": 0.5,
+    "Strategy": 0.3,
+    "Ownership": 0.2
+  },
+  "Agricultural Knowledge": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.3,
+    "Execution": 0.2
+  },
+  "Culinary Skill": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Discipline": 0.1
+  },
+  "Physical Stamina": {
+    "Execution": 0.5,
+    "Discipline": 0.3,
+    "Emotional Stability": 0.2
+  },
+  "Seasonal Planning": {
+    "Strategy": 0.5,
+    "Execution": 0.3,
+    "Discipline": 0.2
+  },
+  "Resourcefulness": {
+    "Execution": 0.5,
+    "Analytical": 0.3,
+    "Risk Appetite": 0.2
+  },
+  "Technical Knowledge of Electrical Systems": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.4,
+    "Execution": 0.1
+  },
+  "Troubleshooting Electrical Faults": {
+    "Analytical": 0.5,
+    "Detail Precision": 0.3,
+    "Execution": 0.2
+  },
+  "Electrical Safety Compliance": {
+    "Discipline": 0.5,
+    "Detail Precision": 0.3,
+    "Ownership": 0.2
+  },
+  "Basic Plumbing Maintenance Skills": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Ownership": 0.1
+  },
+  "Tool Handling Proficiency": {
+    "Execution": 0.5,
+    "Detail Precision": 0.4,
+    "Discipline": 0.1
+  },
+  "Preventive Maintenance Ability": {
+    "Execution": 0.5,
+    "Detail Precision": 0.3,
+    "Discipline": 0.2
+  },
+  "Time Management for Maintenance Tasks": {
+    "Execution": 0.5,
+    "Discipline": 0.3,
+    "Ownership": 0.2
+  }
+}
