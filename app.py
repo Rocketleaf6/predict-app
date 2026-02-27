@@ -18,6 +18,13 @@ from pypdf import PdfReader
 import plotly.express as px
 import streamlit as st
 
+PASSWORD = st.secrets.get("APP_PASSWORD", "")
+
+entered = st.text_input("Enter Password", type="password")
+
+if entered != PASSWORD:
+    st.stop()
+
 TRAITS = [
     "Execution",
     "Detail Precision",
