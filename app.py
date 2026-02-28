@@ -1555,8 +1555,8 @@ def unified_app() -> None:
 
     if user_role == "admin":
         pages = [
-            "Dashboard",
             "Single Analysis",
+            "Dashboard",
             "Compare Candidates",
             "Candidate Database",
             "Upload Candidate",
