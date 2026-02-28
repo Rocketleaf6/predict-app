@@ -21,6 +21,22 @@ from supabase import create_client
 from scoring_engine import *
 from login import login
 
+st.set_page_config(
+    page_title="Numerology Hiring System",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+hide_pages_style = """
+<style>
+section[data-testid="stSidebarNav"] {
+    display: none;
+}
+</style>
+"""
+
+st.markdown(hide_pages_style, unsafe_allow_html=True)
+
 TRAITS = [
     "Execution",
     "Detail Precision",
@@ -1546,7 +1562,6 @@ def single_analysis_page() -> None:
 
 
 def unified_app() -> None:
-    st.set_page_config(page_title="Hiring System", layout="wide")
     if "user" not in st.session_state:
         login()
         st.stop()
