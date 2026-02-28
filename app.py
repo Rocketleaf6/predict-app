@@ -20,6 +20,10 @@ import streamlit as st
 from supabase import create_client
 from scoring_engine import *
 from login import login
+from modules.compare_candidates import render as render_compare
+from modules.roles_and_candidates import render as render_roles_candidates
+from modules.role_master import render as render_role_master
+from modules.user_management import render as render_user_mgmt
 
 st.set_page_config(
     page_title="Numerology Hiring System",
@@ -1077,101 +1081,11 @@ def my_candidates_page() -> None:
     st.dataframe(df, use_container_width=True, hide_index=True)
 
 
-def role_master_page(user_role: str) -> None:
-    st.title("Role Master")
-    supabase = get_supabase_client()
-
-    st.subheader("Create New Role")
-    role_name_input = st.text_input("Role Name", key="role_name_input")
-    role_description_input = st.text_area("Role Description", key="role_description_input")
-
-    if st.button("Save Role", key="save_role"):
-        if not role_name_input or not role_description_input:
-            st.error("Enter role name and description")
-        else:
-            supabase.table("roles").insert({
-                "role_name": role_name_input,
-                "role_description": role_description_input,
-            }).execute()
-            st.success("Role saved successfully")
-
-    st.subheader("Existing Roles")
-    roles_response = supabase.table("roles").select("*").execute()
-    roles_data = roles_response.data or []
-
-    for role in roles_data:
-        if st.button(role["role_name"], key=f"edit_role_{role['id']}"):
-            st.session_state["edit_role_id"] = role["id"]
-
-    if "edit_role_id" in st.session_state:
-        role_id = st.session_state["edit_role_id"]
-        role_data = next(r for r in roles_data if r["id"] == role_id)
-
-        @st.dialog("Edit Role")
-        def edit_role_dialog():
-            new_name = st.text_input("Role Name", value=role_data["role_name"])
-            new_desc = st.text_area("Role Description", value=role_data["role_description"])
-            col1, col2 = st.columns(2)
-
-            with col1:
-                if user_role == "admin" and st.button("Save"):
-                    supabase.table("roles").update({
-                        "role_name": new_name,
-                        "role_description": new_desc,
-                    }).eq("id", role_id).execute()
-                    st.success("Role updated")
-                    del st.session_state["edit_role_id"]
-                    st.rerun()
-
-            with col2:
-                if st.button("Cancel"):
-                    del st.session_state["edit_role_id"]
-                    st.rerun()
-
-            if user_role == "admin":
-                if st.button("Delete Role", key=f"delete_role_{role_id}"):
-                    supabase.table("roles").delete().eq("id", role_id).execute()
-                    del st.session_state["edit_role_id"]
-                    st.rerun()
-
-        edit_role_dialog()
-
-
 def database_page() -> None:
     st.title("Candidate Database")
     supabase = get_supabase_client()
     candidates = supabase.table("Candidates").select("*").execute()
     st.dataframe(pd.DataFrame(candidates.data or []), use_container_width=True, hide_index=True)
-
-
-def user_management() -> None:
-    st.title("User Management")
-    supabase = get_supabase_client()
-
-    st.subheader("Create User")
-    email = st.text_input("Email")
-    password = st.text_input("Password")
-    role = st.selectbox("Role", ["employee", "admin"])
-
-    if st.button("Create User"):
-        supabase.table("users").insert({
-            "email": email,
-            "password": password,
-            "role": role,
-        }).execute()
-        st.success("User created")
-
-    st.subheader("Existing Users")
-    users = supabase.table("users").select("*").execute()
-    st.dataframe(pd.DataFrame(users.data or []), use_container_width=True, hide_index=True)
-
-
-def dashboard_page() -> None:
-    st.switch_page("pages/3_Roles_and_Candidates.py")
-
-
-def compare_page() -> None:
-    st.switch_page("pages/2_Compare_Candidates.py")
 
 
 def single_analysis_page() -> None:
@@ -1571,7 +1485,7 @@ def unified_app() -> None:
     if user_role == "admin":
         pages = [
             "Single Analysis",
-            "Dashboard",
+            "Roles and Candidates",
             "Compare Candidates",
             "Candidate Database",
             "Upload Candidate",
@@ -1597,18 +1511,17 @@ def unified_app() -> None:
     elif selection == "My Candidates":
         my_candidates_page()
     elif selection == "Role Master":
-        role_master_page(user_role)
+        render_role_master()
     elif selection == "Single Analysis":
-        admin_analysis = single_analysis_page
-        admin_analysis()
+        single_analysis_page()
     elif selection == "Compare Candidates":
-        compare_page()
+        render_compare()
     elif selection == "Candidate Database":
         database_page()
     elif selection == "User Management":
-        user_management()
-    elif selection == "Dashboard":
-        dashboard_page()
+        render_user_mgmt()
+    elif selection == "Roles and Candidates":
+        render_roles_candidates()
 
 
 if __name__ == "__main__":
