@@ -8,7 +8,7 @@ import streamlit as st
 from supabase import create_client
 
 
-ACTION_OPTIONS = ["Select Action", "Go Ahead", "Waitlist", "Reject"]
+DECISION_OPTIONS = ["Review Pending", "Go Ahead", "Waitlist", "Reject"]
 
 
 def _to_title(value: object) -> str:
@@ -30,13 +30,11 @@ def _load_candidates(supabase):
 
 
 def _update_candidate_status(supabase, candidate_id: object, action_value: str) -> bool:
-    status_value = "Rejected" if action_value == "Reject" else action_value
     for table_name in ("Candidates", "candidates"):
         try:
             supabase.table(table_name).update(
                 {
-                    "status": status_value,
-                    "stage": "Finalized",
+                    "status": action_value,
                 }
             ).eq("id", candidate_id).execute()
             return True
@@ -107,56 +105,71 @@ def render() -> None:
             continue
 
         st.markdown(f"## Role: {_to_title(role_name)}")
-
-        selected_ids = []
-        for idx, row in role_df.iterrows():
-            checkbox_label = _to_title(row["name"]) or f"Candidate {idx + 1}"
-            if st.checkbox(checkbox_label, key=f"compare_select_{role_name}_{row['id']}"):
-                selected_ids.append(row["id"])
-
-        if st.button("Analyze Selected Candidates", key=f"analyze_selected_{role_name}"):
-            if not selected_ids:
-                st.warning("Select at least one candidate.")
-            else:
-                selected_rows = role_df[role_df["id"].isin(selected_ids)].copy()
-                role_description = str(selected_rows.iloc[0].get("role_description", "") or "")
-                _prepare_compare_session(selected_rows, role_name, role_description)
-                st.session_state["nav"] = "Compare Candidates"
-                st.rerun()
-
-        editor_df = pd.DataFrame(
-            {
-                "Name": role_df["name"].map(_to_title),
-                "Role": role_df["role"].map(_to_title),
-                "Verdict": role_df["verdict"].fillna("").astype(str).str.upper(),
-                "Stage": role_df["stage"].map(_to_title),
-                "Status": role_df["status"].map(_to_title),
-                "Action": "Select Action",
-            }
-        )
+        display_df = role_df.copy()
+        display_df["Select"] = False
+        display_df["Decision"] = display_df["status"].fillna("Review Pending")
+        display_df["Decision"] = display_df["Decision"].replace("", "Review Pending")
+        display_df["name"] = display_df["name"].map(_to_title)
+        display_df["role"] = display_df["role"].map(_to_title)
+        display_df["verdict"] = display_df["verdict"].fillna("").astype(str).str.upper()
+        display_df["stage"] = display_df["stage"].map(_to_title)
 
         edited_df = st.data_editor(
-            editor_df,
+            display_df[
+                [
+                    "Select",
+                    "name",
+                    "role",
+                    "verdict",
+                    "stage",
+                    "Decision",
+                ]
+            ],
             use_container_width=True,
             hide_index=True,
             key=f"role_editor_{role_name}",
             column_config={
-                "Action": st.column_config.SelectboxColumn(
-                    "Action",
-                    options=ACTION_OPTIONS,
-                )
+                "Select": st.column_config.CheckboxColumn("Select"),
+                "Decision": st.column_config.SelectboxColumn(
+                    "Decision",
+                    options=DECISION_OPTIONS,
+                    required=True,
+                ),
             },
-            disabled=["Name", "Role", "Verdict", "Stage", "Status"],
+            disabled=["name", "role", "verdict", "stage"],
         )
 
         for idx, row in edited_df.iterrows():
-            action_value = str(row.get("Action", "Select Action")).strip()
-            if action_value == "Select Action":
+            candidate_id = role_df.iloc[idx]["id"]
+            new_decision = str(row.get("Decision", "Review Pending")).strip() or "Review Pending"
+            old_decision = str(role_df.iloc[idx].get("status", "") or "").strip() or "Review Pending"
+
+            if new_decision == old_decision:
                 continue
 
-            candidate_id = role_df.iloc[idx]["id"]
-            if _update_candidate_status(supabase, candidate_id, action_value):
+            if _update_candidate_status(supabase, candidate_id, new_decision):
                 st.rerun()
             else:
                 st.error("Could not update candidate status.")
                 return
+
+        selected_rows = edited_df[edited_df["Select"] == True]
+
+        if st.button("Analyze Selected Candidates", key=f"analyze_selected_{role_name}"):
+            if len(selected_rows) == 0:
+                st.warning("Please select candidates")
+            else:
+                selected_ids = role_df.iloc[selected_rows.index]["id"]
+                selected_full = role_df[role_df["id"].isin(selected_ids)].copy()
+                selected_role_name = str(selected_full.iloc[0]["role"])
+                role_description = str(selected_full.iloc[0]["role_description"] or "")
+
+                _prepare_compare_session(
+                    selected_full,
+                    selected_role_name,
+                    role_description,
+                )
+
+                st.session_state["nav"] = "Compare Candidates"
+                st.session_state["compare_ready"] = True
+                st.rerun()
