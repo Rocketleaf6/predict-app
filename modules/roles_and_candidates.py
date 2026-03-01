@@ -8,7 +8,7 @@ import streamlit as st
 from supabase import create_client
 
 
-DECISION_OPTIONS = ["Review Pending", "Go Ahead", "Waitlist", "Reject"]
+STAGE_OPTIONS = ["Review Pending", "Go Ahead", "Waitlist", "Reject"]
 
 
 def _to_title(value: object) -> str:
@@ -35,6 +35,7 @@ def _update_candidate_status(supabase, candidate_id: object, action_value: str) 
             supabase.table(table_name).update(
                 {
                     "status": action_value,
+                    "stage": action_value,
                 }
             ).eq("id", candidate_id).execute()
             return True
@@ -107,8 +108,8 @@ def render() -> None:
         st.markdown(f"## Role: {_to_title(role_name)}")
         display_df = role_df.copy()
         display_df["Select"] = False
-        display_df["Decision"] = display_df["status"].fillna("Review Pending")
-        display_df["Decision"] = display_df["Decision"].replace("", "Review Pending")
+        display_df["stage"] = display_df["stage"].fillna("Review Pending")
+        display_df["stage"] = display_df["stage"].replace("", "Review Pending")
         display_df["name"] = display_df["name"].map(_to_title)
         display_df["role"] = display_df["role"].map(_to_title)
         display_df["verdict"] = display_df["verdict"].fillna("").astype(str).str.upper()
@@ -122,7 +123,6 @@ def render() -> None:
                     "role",
                     "verdict",
                     "stage",
-                    "Decision",
                 ]
             ],
             use_container_width=True,
@@ -130,19 +130,19 @@ def render() -> None:
             key=f"role_editor_{role_name}",
             column_config={
                 "Select": st.column_config.CheckboxColumn("Select"),
-                "Decision": st.column_config.SelectboxColumn(
-                    "Decision",
-                    options=DECISION_OPTIONS,
+                "stage": st.column_config.SelectboxColumn(
+                    "Stage",
+                    options=STAGE_OPTIONS,
                     required=True,
                 ),
             },
-            disabled=["name", "role", "verdict", "stage"],
+            disabled=["name", "role", "verdict"],
         )
 
         for idx, row in edited_df.iterrows():
             candidate_id = role_df.iloc[idx]["id"]
-            new_decision = str(row.get("Decision", "Review Pending")).strip() or "Review Pending"
-            old_decision = str(role_df.iloc[idx].get("status", "") or "").strip() or "Review Pending"
+            new_decision = str(row.get("stage", "Review Pending")).strip() or "Review Pending"
+            old_decision = str(role_df.iloc[idx].get("stage", "") or "").strip() or "Review Pending"
 
             if new_decision == old_decision:
                 continue
