@@ -9,6 +9,13 @@ from supabase import create_client
 
 
 STAGE_OPTIONS = ["Review Pending", "Go Ahead", "Waitlist", "Reject"]
+STAGE_LABELS = {
+    "Review Pending": "⚪ Review Pending",
+    "Go Ahead": "🟢 Go Ahead",
+    "Waitlist": "🟡 Waitlist",
+    "Reject": "🔴 Reject",
+}
+LABEL_TO_STAGE = {label: stage for stage, label in STAGE_LABELS.items()}
 
 
 def _to_title(value: object) -> str:
@@ -112,7 +119,9 @@ def render() -> None:
         display_df["name"] = display_df["name"].map(_to_title)
         display_df["role"] = display_df["role"].map(_to_title)
         display_df["verdict"] = display_df["verdict"].fillna("").astype(str).str.upper()
-        display_df["stage"] = display_df["stage"].map(_to_title)
+        display_df["stage"] = display_df["stage"].map(
+            lambda value: STAGE_LABELS.get(_to_title(value), STAGE_LABELS["Review Pending"])
+        )
 
         edited_df = st.data_editor(
             display_df[
@@ -131,7 +140,7 @@ def render() -> None:
                 "Select": st.column_config.CheckboxColumn("Select"),
                 "stage": st.column_config.SelectboxColumn(
                     "Stage",
-                    options=STAGE_OPTIONS,
+                    options=list(STAGE_LABELS.values()),
                     required=True,
                 ),
             },
@@ -140,7 +149,8 @@ def render() -> None:
 
         for idx, row in edited_df.iterrows():
             candidate_id = role_df.iloc[idx]["id"]
-            new_decision = str(row.get("stage", "Review Pending")).strip() or "Review Pending"
+            new_decision_label = str(row.get("stage", STAGE_LABELS["Review Pending"])).strip()
+            new_decision = LABEL_TO_STAGE.get(new_decision_label, "Review Pending")
             old_decision = str(role_df.iloc[idx].get("stage", "") or "").strip() or "Review Pending"
 
             if new_decision == old_decision:
