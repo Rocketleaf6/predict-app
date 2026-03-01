@@ -1023,6 +1023,18 @@ def employee_upload() -> None:
         if selected_role == "Select Role":
             st.error("Please select role")
             return
+        if not selected_role_description.strip():
+            st.error("Role description is required")
+            return
+        if not name.strip():
+            st.error("Candidate name is required")
+            return
+        if not dob.strip():
+            st.error("DOB is required")
+            return
+        if not cv:
+            st.error("CV upload is required")
+            return
 
         cv_path = ""
         excel_path = ""
@@ -1079,6 +1091,16 @@ def my_candidates_page() -> None:
         st.info("No candidate data available.")
         return
     df = df[columns]
+    stage_labels = {
+        "Review Pending": "⚪ Review Pending",
+        "Go Ahead": "🟢 Go Ahead",
+        "Waitlist": "🟡 Waitlist",
+        "Reject": "🔴 Reject",
+    }
+    if "stage" in df.columns:
+        df["stage"] = df["stage"].fillna("").astype(str).map(
+            lambda value: stage_labels.get(str(value).strip().title(), str(value).strip())
+        )
     df.columns = [c.replace("_", " ").title() for c in df.columns]
     st.dataframe(df, use_container_width=True, hide_index=True)
 
