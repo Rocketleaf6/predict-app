@@ -34,7 +34,6 @@ def _update_candidate_status(supabase, candidate_id: object, action_value: str) 
         try:
             supabase.table(table_name).update(
                 {
-                    "status": action_value,
                     "stage": action_value,
                 }
             ).eq("id", candidate_id).execute()
