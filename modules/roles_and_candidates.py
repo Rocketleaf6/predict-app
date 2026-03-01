@@ -8,7 +8,7 @@ import streamlit as st
 from supabase import create_client
 
 
-DISPLAY_COLUMNS = ["Name", "Role", "Verdict", "Stage", "Status", "Action"]
+ACTION_OPTIONS = ["Select Action", "Go Ahead", "Waitlist", "Reject"]
 
 
 def _to_title(value: object) -> str:
@@ -16,58 +16,51 @@ def _to_title(value: object) -> str:
     return text.title() if text else ""
 
 
-def _load_candidates(supabase) -> pd.DataFrame:
+def _load_candidates(supabase):
     response = None
+    table_used = None
     for table_name in ("Candidates", "candidates"):
         try:
             response = supabase.table(table_name).select("*").execute()
-            if response is not None:
-                break
+            table_used = table_name
+            break
         except Exception:
             response = None
-    if response is None:
-        return pd.DataFrame()
-    df = pd.DataFrame(response.data or [])
-    if df.empty:
-        return df
-    if "status" not in df.columns:
-        df["status"] = ""
-    return df
+    return pd.DataFrame(response.data or []), table_used
 
 
-def _update_candidate_status(supabase, candidate_id: object, status: str) -> None:
+def _update_candidate_status(supabase, candidate_id: object, action_value: str) -> bool:
+    status_value = "Rejected" if action_value == "Reject" else action_value
     for table_name in ("Candidates", "candidates"):
         try:
             supabase.table(table_name).update(
                 {
-                    "status": status,
+                    "status": status_value,
                     "stage": "Finalized",
                 }
             ).eq("id", candidate_id).execute()
-            return
+            return True
         except Exception:
             continue
-    st.error("Could not update candidate status in Supabase.")
+    return False
 
 
-def _render_actions(supabase, candidate_id: object, candidate_name: str) -> None:
-    st.caption(f"Update status for {_to_title(candidate_name)}")
-    col1, col2, col3 = st.columns(3)
+def _prepare_compare_session(selected_rows: pd.DataFrame, role_name: str, role_description: str) -> None:
+    dobs = [str(value).strip() for value in selected_rows["dob"].tolist() if str(value).strip()]
+    names = [str(value or "").strip() for value in selected_rows["name"].tolist()]
+    ids = [value for value in selected_rows["id"].tolist()]
 
-    with col1:
-        if st.button("Go Ahead", key=f"go_ahead_{candidate_id}", use_container_width=True):
-            _update_candidate_status(supabase, candidate_id, "Go Ahead")
-            st.rerun()
+    st.session_state["compare_candidate_ids"] = ids
+    st.session_state["compare_candidates"] = [
+        {"name": names[idx], "dob": dobs[idx]}
+        for idx in range(min(len(dobs), len(names)))
+    ]
+    st.session_state["compare_candidates_initialized"] = True
 
-    with col2:
-        if st.button("Waitlist", key=f"waitlist_{candidate_id}", use_container_width=True):
-            _update_candidate_status(supabase, candidate_id, "Waitlist")
-            st.rerun()
-
-    with col3:
-        if st.button("Reject", key=f"reject_{candidate_id}", use_container_width=True):
-            _update_candidate_status(supabase, candidate_id, "Reject")
-            st.rerun()
+    st.query_params["dobs"] = ",".join(dobs)
+    st.query_params["names"] = ",".join(names)
+    st.query_params["role"] = role_name
+    st.query_params["role_description"] = role_description
 
 
 def render() -> None:
@@ -85,50 +78,84 @@ def render() -> None:
         st.secrets["SUPABASE_KEY"].strip(),
     )
 
-    df = _load_candidates(supabase)
+    df, table_used = _load_candidates(supabase)
     if df.empty:
         st.info("No candidates found.")
         return
+    if table_used is None:
+        st.error("Could not read candidates table from Supabase.")
+        return
 
-    required_cols = {"id", "name", "role", "verdict", "stage", "status"}
+    required_cols = {"id", "name", "role", "dob", "verdict", "stage"}
     missing = [col for col in required_cols if col not in df.columns]
     if missing:
         st.error(f"Missing required columns in candidates table: {', '.join(missing)}")
         return
 
+    if "status" not in df.columns:
+        df["status"] = ""
+    if "role_description" not in df.columns:
+        df["role_description"] = ""
+
     role_values = sorted(
         {str(role).strip() for role in df["role"].dropna() if str(role).strip()}
     )
-    if not role_values:
-        st.info("No roles found in candidate data.")
-        return
 
     for role_name in role_values:
-        role_df = df[df["role"].astype(str).str.strip() == role_name].copy()
+        role_df = df[df["role"].astype(str).str.strip() == role_name].copy().reset_index(drop=True)
         if role_df.empty:
             continue
 
-        display_df = pd.DataFrame(
+        st.markdown(f"## Role: {_to_title(role_name)}")
+
+        selected_ids = []
+        for idx, row in role_df.iterrows():
+            checkbox_label = _to_title(row["name"]) or f"Candidate {idx + 1}"
+            if st.checkbox(checkbox_label, key=f"compare_select_{role_name}_{row['id']}"):
+                selected_ids.append(row["id"])
+
+        if st.button("Analyze Selected Candidates", key=f"analyze_selected_{role_name}"):
+            if not selected_ids:
+                st.warning("Select at least one candidate.")
+            else:
+                selected_rows = role_df[role_df["id"].isin(selected_ids)].copy()
+                role_description = str(selected_rows.iloc[0].get("role_description", "") or "")
+                _prepare_compare_session(selected_rows, role_name, role_description)
+                st.switch_page("modules/compare_candidates.py")
+
+        editor_df = pd.DataFrame(
             {
                 "Name": role_df["name"].map(_to_title),
                 "Role": role_df["role"].map(_to_title),
                 "Verdict": role_df["verdict"].fillna("").astype(str).str.upper(),
                 "Stage": role_df["stage"].map(_to_title),
                 "Status": role_df["status"].map(_to_title),
-                "Action": "Use Buttons Below",
+                "Action": "Select Action",
             }
         )
 
-        st.markdown(f"## Role: {_to_title(role_name)}")
-        st.dataframe(display_df[DISPLAY_COLUMNS], use_container_width=True, hide_index=True)
+        edited_df = st.data_editor(
+            editor_df,
+            use_container_width=True,
+            hide_index=True,
+            key=f"role_editor_{role_name}",
+            column_config={
+                "Action": st.column_config.SelectboxColumn(
+                    "Action",
+                    options=ACTION_OPTIONS,
+                )
+            },
+            disabled=["Name", "Role", "Verdict", "Stage", "Status"],
+        )
 
-        for _, row in role_df.iterrows():
-            st.caption(
-                f"{_to_title(row['name'])} | "
-                f"{_to_title(row['role'])} | "
-                f"{str(row.get('verdict', '') or '').upper()} | "
-                f"{_to_title(row.get('stage', ''))} | "
-                f"{_to_title(row.get('status', ''))}"
-            )
-            _render_actions(supabase, row["id"], row["name"])
-            st.markdown("---")
+        for idx, row in edited_df.iterrows():
+            action_value = str(row.get("Action", "Select Action")).strip()
+            if action_value == "Select Action":
+                continue
+
+            candidate_id = role_df.iloc[idx]["id"]
+            if _update_candidate_status(supabase, candidate_id, action_value):
+                st.rerun()
+            else:
+                st.error("Could not update candidate status.")
+                return
