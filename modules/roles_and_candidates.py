@@ -121,7 +121,8 @@ def render() -> None:
                 selected_rows = role_df[role_df["id"].isin(selected_ids)].copy()
                 role_description = str(selected_rows.iloc[0].get("role_description", "") or "")
                 _prepare_compare_session(selected_rows, role_name, role_description)
-                st.switch_page("modules/compare_candidates.py")
+                st.session_state["nav"] = "Compare Candidates"
+                st.rerun()
 
         editor_df = pd.DataFrame(
             {
