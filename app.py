@@ -1539,7 +1539,11 @@ def unified_app() -> None:
         if st.button("Logout"):
             del st.session_state["user"]
             st.rerun()
-        selection = st.selectbox("Navigation", pages)
+        if "nav" in st.session_state:
+            selection = st.session_state["nav"]
+            del st.session_state["nav"]
+        else:
+            selection = st.selectbox("Navigation", pages)
 
     if selection == "Upload Candidate":
         employee_upload()
