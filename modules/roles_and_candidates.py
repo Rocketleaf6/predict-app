@@ -3,11 +3,85 @@
 
 from __future__ import annotations
 
-import urllib.parse
-
 import pandas as pd
 import streamlit as st
 from supabase import create_client
+
+
+DISPLAY_COLUMNS = ["Name", "Role", "Verdict", "Stage", "Status"]
+
+
+def _to_proper_case(value) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    return " ".join(part.capitalize() for part in text.split())
+
+
+def _load_candidates(supabase):
+    response = None
+    table_name_used = None
+    for table_name in ("Candidates", "candidates"):
+        try:
+            response = supabase.table(table_name).select("*").execute()
+            table_name_used = table_name
+            break
+        except Exception:
+            response = None
+    return response, table_name_used
+
+
+def _update_candidate_status(supabase, table_name: str, candidate_id, status: str) -> None:
+    supabase.table(table_name).update({
+        "status": status,
+        "stage": "Reviewed",
+    }).eq("id", candidate_id).execute()
+
+
+def _render_role_table(role_name: str, role_df: pd.DataFrame, supabase, table_name: str) -> None:
+    st.markdown(f"## {role_name}")
+
+    display_df = role_df.copy()
+    display_df["name"] = display_df["name"].map(_to_proper_case)
+    display_df["role"] = display_df["role"].map(_to_proper_case)
+    display_df["verdict"] = display_df["verdict"].map(_to_proper_case)
+    display_df["stage"] = display_df["stage"].map(_to_proper_case)
+    display_df["status"] = display_df["status"].map(_to_proper_case)
+
+    table_df = display_df[["name", "role", "verdict", "stage", "status"]].copy()
+    table_df.columns = DISPLAY_COLUMNS
+    st.dataframe(table_df, use_container_width=True, hide_index=True)
+
+    header_cols = st.columns([2.2, 2.0, 1.4, 1.4, 1.4, 1.2])
+    header_cols[0].markdown("**Name**")
+    header_cols[1].markdown("**Role**")
+    header_cols[2].markdown("**Verdict**")
+    header_cols[3].markdown("**Stage**")
+    header_cols[4].markdown("**Status**")
+    header_cols[5].markdown("**Action**")
+
+    for _, candidate in display_df.iterrows():
+        candidate_id = candidate.get("id")
+        row_cols = st.columns([2.2, 2.0, 1.4, 1.4, 1.4, 1.2])
+        row_cols[0].write(candidate["name"])
+        row_cols[1].write(candidate["role"])
+        row_cols[2].write(candidate["verdict"])
+        row_cols[3].write(candidate["stage"])
+        row_cols[4].write(candidate["status"])
+
+        with row_cols[5]:
+            action_cols = st.columns(3)
+            if action_cols[0].button("Go Ahead", key=f"go_ahead_{candidate_id}"):
+                _update_candidate_status(supabase, table_name, candidate_id, "Go Ahead")
+                st.rerun()
+            if action_cols[1].button("Waitlist", key=f"waitlist_{candidate_id}"):
+                _update_candidate_status(supabase, table_name, candidate_id, "Waitlist")
+                st.rerun()
+            if action_cols[2].button("Reject", key=f"reject_{candidate_id}"):
+                _update_candidate_status(supabase, table_name, candidate_id, "Rejected")
+                st.rerun()
+
+    st.markdown("---")
 
 
 def render() -> None:
@@ -19,64 +93,34 @@ def render() -> None:
         st.stop()
 
     st.title("Roles and Candidates Dashboard")
-
     supabase = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
 
-    response = None
-    for table_name in ("Candidates", "candidates"):
-        try:
-            response = supabase.table(table_name).select("*").execute()
-            break
-        except Exception:
-            response = None
-
-    if response is None:
+    response, table_name = _load_candidates(supabase)
+    if response is None or table_name is None:
         st.error("Could not read table from Supabase. Tried: Candidates, candidates")
         return
 
-    df = pd.DataFrame(response.data)
+    df = pd.DataFrame(response.data or [])
     if df.empty:
         st.warning("No candidates found in Supabase table: candidates")
         return
 
-    required_cols = {"role", "name", "dob", "role_description", "cv_url", "personal_excel_url"}
+    required_cols = {"id", "name", "role", "verdict", "stage"}
     missing = [c for c in required_cols if c not in df.columns]
     if missing:
         st.error(f"Missing required columns in Supabase candidates table: {', '.join(missing)}")
         return
 
-    roles = df["role"].dropna().unique()
-    selected_role = st.selectbox("Select Role", roles)
-    role_df = df[df["role"] == selected_role]
+    if "status" not in df.columns:
+        df["status"] = ""
 
-    st.header(f"Candidates for {selected_role}")
-    selected_dobs = []
-    selected_names = []
+    df["role"] = df["role"].fillna("")
+    grouped_roles = sorted([role for role in df["role"].unique().tolist() if str(role).strip()])
 
-    for i, row in role_df.iterrows():
-        col1, col2, col3, col4, col5, col6 = st.columns([2, 2, 3, 1, 1, 1])
-        col1.write(row["name"])
-        col2.write(row["dob"])
-        col3.write(row["role_description"])
-        cv_url = supabase.storage.from_("files").get_public_url(row["cv_url"]) if row.get("cv_url") else ""
-        excel_url = supabase.storage.from_("files").get_public_url(row["personal_excel_url"]) if row.get("personal_excel_url") else ""
-        col4.markdown(f"[Open CV]({cv_url})" if cv_url else "-")
-        col5.markdown(f"[Open Data]({excel_url})" if excel_url else "-")
-        params = urllib.parse.urlencode({"dob": row["dob"], "role": row["role"], "role_description": row["role_description"]})
-        analyze_url = f"/?{params}"
-        col6.markdown(f'<a href="{analyze_url}">Analyze</a>', unsafe_allow_html=True)
+    if not grouped_roles:
+        st.info("No roles found in candidate data.")
+        return
 
-        if st.checkbox("Select", key=f"candidate_select_{i}"):
-            selected_dobs.append(str(row["dob"]))
-            selected_names.append(str(row["name"]))
-
-    if selected_dobs:
-        role_desc_for_compare = str(role_df.iloc[0]["role_description"]) if not role_df.empty else ""
-        params = urllib.parse.urlencode({
-            "dobs": ",".join(selected_dobs),
-            "names": ",".join(selected_names),
-            "role": str(selected_role),
-            "role_description": role_desc_for_compare,
-        })
-        st.info("Comparison opens inside the custom dropdown flow. Use Navigation > Compare Candidates after choosing the same role/candidates if needed.")
-        st.code(params, language="text")
+    for role_name in grouped_roles:
+        role_df = df[df["role"] == role_name].copy()
+        _render_role_table(_to_proper_case(role_name), role_df, supabase, table_name)
