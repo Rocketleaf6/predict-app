@@ -12,7 +12,9 @@ supabase = create_client(
 
 
 def get_cookie_manager():
-    return stx.CookieManager()
+    if "global_cookie_manager" not in st.session_state:
+        st.session_state["global_cookie_manager"] = stx.CookieManager(key="global_cookie_manager")
+    return st.session_state["global_cookie_manager"]
 
 
 def restore_login_from_cookie():
