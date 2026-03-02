@@ -50,6 +50,28 @@ def _update_candidate_status(supabase, candidate_id: object, action_value: str) 
     return False
 
 
+def _delete_candidate(supabase, candidate_row: pd.Series) -> bool:
+    file_paths = [
+        path for path in [
+            candidate_row.get("cv_url"),
+            candidate_row.get("personal_excel_url"),
+        ] if path
+    ]
+    if file_paths:
+        try:
+            supabase.storage.from_("candidates-files").remove(file_paths)
+        except Exception:
+            pass
+
+    for table_name in ("Candidates", "candidates"):
+        try:
+            supabase.table(table_name).delete().eq("id", candidate_row["id"]).execute()
+            return True
+        except Exception:
+            continue
+    return False
+
+
 def _prepare_compare_session(selected_rows: pd.DataFrame, role_name: str, role_description: str) -> None:
     dobs = [str(value).strip() for value in selected_rows["dob"].tolist() if str(value).strip()]
     names = [str(value or "").strip() for value in selected_rows["name"].tolist()]
@@ -66,6 +88,12 @@ def _prepare_compare_session(selected_rows: pd.DataFrame, role_name: str, role_d
     st.query_params["names"] = ",".join(names)
     st.query_params["role"] = role_name
     st.query_params["role_description"] = role_description
+
+
+def _prepare_single_analysis_session(candidate_row: pd.Series) -> None:
+    st.query_params["dob"] = str(candidate_row.get("dob", "") or "")
+    st.query_params["role"] = str(candidate_row.get("role", "") or "")
+    st.query_params["role_description"] = str(candidate_row.get("role_description", "") or "")
 
 
 def render() -> None:
@@ -182,3 +210,42 @@ def render() -> None:
                 st.session_state["nav"] = "Compare Candidates"
                 st.session_state["compare_ready"] = True
                 st.rerun()
+
+        st.markdown("#### Analyze Profile")
+        for _, candidate_row in role_df.iterrows():
+            candidate_id = candidate_row["id"]
+            candidate_name = _to_title(candidate_row.get("name", "")) or "Candidate"
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.write(candidate_name)
+            with col2:
+                if st.button("Analyze", key=f"analyze_profile_{candidate_id}", use_container_width=True):
+                    _prepare_single_analysis_session(candidate_row)
+                    st.session_state["nav"] = "Single Analysis"
+                    st.rerun()
+
+        st.markdown("#### Delete Profile")
+        for _, candidate_row in role_df.iterrows():
+            candidate_id = candidate_row["id"]
+            candidate_name = _to_title(candidate_row.get("name", "")) or "Candidate"
+            confirm_key = f"admin_delete_confirm_{candidate_id}"
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.write(candidate_name)
+            with col2:
+                if st.button("Delete", key=f"admin_delete_{candidate_id}", use_container_width=True):
+                    st.session_state[confirm_key] = True
+
+            if st.session_state.get(confirm_key):
+                st.warning(f"Delete {candidate_name}?")
+                c1, c2 = st.columns(2)
+                with c1:
+                    if st.button("Confirm Delete", key=f"admin_delete_yes_{candidate_id}", use_container_width=True):
+                        if _delete_candidate(supabase, candidate_row):
+                            st.session_state.pop(confirm_key, None)
+                            st.rerun()
+                        st.error("Could not delete candidate.")
+                with c2:
+                    if st.button("Cancel", key=f"admin_delete_no_{candidate_id}", use_container_width=True):
+                        st.session_state.pop(confirm_key, None)
+                        st.rerun()
