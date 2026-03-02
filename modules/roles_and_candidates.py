@@ -91,7 +91,11 @@ def _prepare_compare_session(selected_rows: pd.DataFrame, role_name: str, role_d
 
 
 def _prepare_single_analysis_session(candidate_row: pd.Series) -> None:
+    candidate_name = str(candidate_row.get("name", "") or "").strip()
+    st.session_state["candidate_name_input"] = candidate_name
+    st.session_state["candidate_dob_input"] = str(candidate_row.get("dob", "") or "").strip()
     st.query_params["dob"] = str(candidate_row.get("dob", "") or "")
+    st.query_params["name"] = candidate_name
     st.query_params["role"] = str(candidate_row.get("role", "") or "")
     st.query_params["role_description"] = str(candidate_row.get("role_description", "") or "")
 
