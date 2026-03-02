@@ -142,6 +142,8 @@ def render() -> None:
         st.markdown(f"## Role: {_to_title(role_name)}")
         display_df = role_df.copy()
         display_df["Select"] = False
+        display_df["Analyze"] = False
+        display_df["Delete"] = False
         display_df["stage"] = display_df["stage"].fillna("Review Pending")
         display_df["stage"] = display_df["stage"].replace("", "Review Pending")
         display_df["name"] = display_df["name"].map(_to_title)
@@ -159,6 +161,8 @@ def render() -> None:
                     "role",
                     "verdict",
                     "stage",
+                    "Analyze",
+                    "Delete",
                 ]
             ],
             use_container_width=True,
@@ -171,12 +175,25 @@ def render() -> None:
                     options=list(STAGE_LABELS.values()),
                     required=True,
                 ),
+                "Analyze": st.column_config.CheckboxColumn("Analyze"),
+                "Delete": st.column_config.CheckboxColumn("Delete"),
             },
             disabled=["name", "role", "verdict"],
         )
 
         for idx, row in edited_df.iterrows():
             candidate_id = role_df.iloc[idx]["id"]
+            if bool(row.get("Analyze", False)):
+                _prepare_single_analysis_session(role_df.iloc[idx])
+                st.session_state["nav"] = "Single Analysis"
+                st.rerun()
+
+            if bool(row.get("Delete", False)):
+                if _delete_candidate(supabase, role_df.iloc[idx]):
+                    st.rerun()
+                st.error("Could not delete candidate.")
+                return
+
             new_decision_label = str(row.get("stage", STAGE_LABELS["Review Pending"])).strip()
             new_decision = LABEL_TO_STAGE.get(new_decision_label, "Review Pending")
             old_decision = str(role_df.iloc[idx].get("stage", "") or "").strip() or "Review Pending"
@@ -210,42 +227,3 @@ def render() -> None:
                 st.session_state["nav"] = "Compare Candidates"
                 st.session_state["compare_ready"] = True
                 st.rerun()
-
-        st.markdown("#### Analyze Profile")
-        for _, candidate_row in role_df.iterrows():
-            candidate_id = candidate_row["id"]
-            candidate_name = _to_title(candidate_row.get("name", "")) or "Candidate"
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.write(candidate_name)
-            with col2:
-                if st.button("Analyze", key=f"analyze_profile_{candidate_id}", use_container_width=True):
-                    _prepare_single_analysis_session(candidate_row)
-                    st.session_state["nav"] = "Single Analysis"
-                    st.rerun()
-
-        st.markdown("#### Delete Profile")
-        for _, candidate_row in role_df.iterrows():
-            candidate_id = candidate_row["id"]
-            candidate_name = _to_title(candidate_row.get("name", "")) or "Candidate"
-            confirm_key = f"admin_delete_confirm_{candidate_id}"
-            col1, col2 = st.columns([3, 1])
-            with col1:
-                st.write(candidate_name)
-            with col2:
-                if st.button("Delete", key=f"admin_delete_{candidate_id}", use_container_width=True):
-                    st.session_state[confirm_key] = True
-
-            if st.session_state.get(confirm_key):
-                st.warning(f"Delete {candidate_name}?")
-                c1, c2 = st.columns(2)
-                with c1:
-                    if st.button("Confirm Delete", key=f"admin_delete_yes_{candidate_id}", use_container_width=True):
-                        if _delete_candidate(supabase, candidate_row):
-                            st.session_state.pop(confirm_key, None)
-                            st.rerun()
-                        st.error("Could not delete candidate.")
-                with c2:
-                    if st.button("Cancel", key=f"admin_delete_no_{candidate_id}", use_container_width=True):
-                        st.session_state.pop(confirm_key, None)
-                        st.rerun()
