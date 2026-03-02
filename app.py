@@ -1104,6 +1104,45 @@ def my_candidates_page() -> None:
     df.columns = [c.replace("_", " ").title() for c in df.columns]
     st.dataframe(df, use_container_width=True, hide_index=True)
 
+    raw_df = pd.DataFrame(response.data)
+    st.markdown("### Delete Candidate")
+    for _, row in raw_df.iterrows():
+        candidate_id = row.get("id")
+        candidate_name = str(row.get("name", "") or "Candidate").strip() or "Candidate"
+        confirm_key = f"my_candidate_delete_confirm_{candidate_id}"
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.write(candidate_name)
+        with col2:
+            if st.button("Delete", key=f"my_candidate_delete_{candidate_id}", use_container_width=True):
+                st.session_state[confirm_key] = True
+
+        if st.session_state.get(confirm_key):
+            st.warning(f"Delete {candidate_name}?")
+            c1, c2 = st.columns(2)
+            with c1:
+                if st.button("Confirm Delete", key=f"my_candidate_delete_yes_{candidate_id}", use_container_width=True):
+                    try:
+                        file_paths = [
+                            path for path in [
+                                row.get("cv_url"),
+                                row.get("personal_excel_url"),
+                            ] if path
+                        ]
+                        if file_paths:
+                            try:
+                                supabase.storage.from_("candidates-files").remove(file_paths)
+                            except Exception:
+                                pass
+                        supabase.table("Candidates").delete().eq("id", candidate_id).execute()
+                    finally:
+                        st.session_state.pop(confirm_key, None)
+                    st.rerun()
+            with c2:
+                if st.button("Cancel", key=f"my_candidate_delete_no_{candidate_id}", use_container_width=True):
+                    st.session_state.pop(confirm_key, None)
+                    st.rerun()
+
 
 def database_page() -> None:
     st.title("Candidate Database")
