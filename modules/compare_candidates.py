@@ -148,6 +148,12 @@ def _display_candidate_label(dob: str, name_map: Dict[str, str]) -> str:
     return name if name else _short_dob_label(dob)
 
 
+def _display_candidate_column_label(dob: str, name_map: Dict[str, str]) -> str:
+    short_dob = _short_dob_label(dob)
+    name = name_map.get(dob, "").strip()
+    return f"{short_dob} ({name})" if name else short_dob
+
+
 def _get_shared_role_traits_and_weights(role_name: str, role_description: str, api_key: str) -> Tuple[List[str], Dict[str, float]]:
     app = _get_app()
     role_traits: List[str] = []
@@ -291,6 +297,10 @@ def render() -> None:
         return
 
     candidate_dobs = [r["dob"] for r in results]
+    candidate_column_labels = {
+        dob: _display_candidate_column_label(dob, query_name_map)
+        for dob in candidate_dobs
+    }
     api_key = os.getenv("OPENAI_API_KEY", "")
     role_traits, role_trait_weights = _get_shared_role_traits_and_weights(role_name, role_description, api_key)
     trait_map = app.load_trait_attribute_map()
@@ -318,7 +328,7 @@ def render() -> None:
         for r in results:
             dob = r["dob"]
             score = round(float(r["trait_scores"][trait]), 1)
-            row[dob] = score
+            row[candidate_column_labels[dob]] = score
             if score > best_score:
                 best_score = score
                 best_dob = dob
@@ -330,7 +340,7 @@ def render() -> None:
     for r in results:
         dob = r["dob"]
         overall_score = round(float(r["overall_score_100"]), 1)
-        overall_row[dob] = overall_score
+        overall_row[candidate_column_labels[dob]] = overall_score
         if overall_score > best_overall_score:
             best_overall_score = overall_score
             best_overall_dob = dob
@@ -350,7 +360,7 @@ def render() -> None:
         best_score = -1.0
         for dob in candidate_dobs:
             score = round(float(candidate_role_trait_scores[dob].get(trait, 0.0)), 1)
-            row[dob] = score
+            row[candidate_column_labels[dob]] = score
             if score > best_score:
                 best_score = score
                 best_dob = dob
@@ -362,7 +372,7 @@ def render() -> None:
     best_final_score = -1.0
     for dob in candidate_dobs:
         score = round(float(candidate_final_role_scores[dob]), 1)
-        final_row[dob] = score
+        final_row[candidate_column_labels[dob]] = score
         if score > best_final_score:
             best_final_score = score
             best_final_dob = dob
@@ -373,7 +383,7 @@ def render() -> None:
     best_final_100_score = -1.0
     for dob in candidate_dobs:
         score_100 = round(float(candidate_final_role_scores[dob] * 10.0), 1)
-        final_row_100[dob] = score_100
+        final_row_100[candidate_column_labels[dob]] = score_100
         if score_100 > best_final_100_score:
             best_final_100_score = score_100
             best_final_100_dob = dob
@@ -390,7 +400,7 @@ def render() -> None:
     role_chart_rows = []
     for trait in role_traits:
         for dob in candidate_dobs:
-            role_chart_rows.append({"Trait": trait, "DOB": dob, "Score": round(float(candidate_role_trait_scores[dob].get(trait, 0.0)), 1)})
+            role_chart_rows.append({"Trait": trait, "DOB": candidate_column_labels[dob], "Score": round(float(candidate_role_trait_scores[dob].get(trait, 0.0)), 1)})
     role_chart_df = pd.DataFrame(role_chart_rows)
     role_fig = px.bar(role_chart_df, x="Trait", y="Score", color="DOB", barmode="group", text=role_chart_df["Score"].map(lambda x: f"{x:.1f}"))
     role_fig.update_traces(textposition="outside")
@@ -402,7 +412,7 @@ def render() -> None:
         for comp_name, comp_value in r["composite_scores"].items():
             value = round(float(comp_value), 1)
             composite_rows.append({
-                "DOB": r["dob"],
+                "DOB": candidate_column_labels[r["dob"]],
                 "Composite": comp_name,
                 "Score": value,
                 "Tag": app.strength_tag(value),
