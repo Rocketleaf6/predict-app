@@ -47,38 +47,38 @@ NEW_ATTRIBUTES = [
 ATTRIBUTE_KEYS = CORE_TRAITS + NEW_ATTRIBUTES
 
 DESTINY_MATRIX: Dict[int, Dict[str, float]] = {
-    1: {"Execution": 6, "Detail Precision": 5, "Loyalty": 4, "Politics Safe": 5, "Ownership": 7, "Communication": 8, "Analytical": 6, "Strategy": 9, "Authority": 9, "Dominance": 9, "Integrity": 7, "Emotional Stability": 6, "Aggression": 8, "Risk Appetite": 9, "Consistency": 7, "Obedience": 4, "Assertiveness": 9, "Enforcement Ability": 8},
+    1: {"Execution": 6, "Detail Precision": 5, "Loyalty": 5, "Politics Safe": 5, "Ownership": 7, "Communication": 8, "Analytical": 6, "Strategy": 9, "Authority": 9, "Dominance": 9, "Integrity": 7, "Emotional Stability": 6, "Aggression": 8, "Risk Appetite": 9, "Consistency": 7, "Obedience": 4, "Assertiveness": 9, "Enforcement Ability": 8},
     2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 7, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5, "Authority": 4, "Dominance": 3, "Integrity": 8, "Emotional Stability": 5, "Aggression": 3, "Risk Appetite": 4, "Consistency": 7, "Obedience": 8, "Assertiveness": 4, "Enforcement Ability": 4},
-    3: {"Execution": 4, "Detail Precision": 4, "Loyalty": 4, "Politics Safe": 4, "Ownership": 4, "Communication": 9, "Analytical": 4, "Strategy": 8, "Authority": 5, "Dominance": 5, "Integrity": 6, "Emotional Stability": 5, "Aggression": 5, "Risk Appetite": 7, "Consistency": 4, "Obedience": 5, "Assertiveness": 6, "Enforcement Ability": 4},
-    4: {"Execution": 9, "Detail Precision": 8, "Loyalty": 9, "Politics Safe": 9, "Ownership": 9, "Communication": 4, "Analytical": 8, "Strategy": 4, "Authority": 8, "Dominance": 7, "Integrity": 9, "Emotional Stability": 7, "Aggression": 8, "Risk Appetite": 6, "Consistency": 9, "Obedience": 7, "Assertiveness": 7, "Enforcement Ability": 9},
-    5: {"Execution": 3, "Detail Precision": 3, "Loyalty": 3, "Politics Safe": 3, "Ownership": 3, "Communication": 6, "Analytical": 4, "Strategy": 6, "Authority": 5, "Dominance": 5, "Integrity": 5, "Emotional Stability": 5, "Aggression": 6, "Risk Appetite": 8, "Consistency": 3, "Obedience": 4, "Assertiveness": 6, "Enforcement Ability": 4},
+    3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8, "Authority": 5, "Dominance": 5, "Integrity": 6, "Emotional Stability": 5, "Aggression": 5, "Risk Appetite": 7, "Consistency": 5, "Obedience": 6, "Assertiveness": 6, "Enforcement Ability": 5},
+    4: {"Execution": 9, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 8, "Strategy": 4, "Authority": 7, "Dominance": 7, "Integrity": 6, "Emotional Stability": 7, "Aggression": 8, "Risk Appetite": 6, "Consistency": 9, "Obedience": 4, "Assertiveness": 7, "Enforcement Ability": 8},
+    5: {"Execution": 5, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6, "Authority": 5, "Dominance": 5, "Integrity": 5, "Emotional Stability": 5, "Aggression": 6, "Risk Appetite": 8, "Consistency": 4, "Obedience": 5, "Assertiveness": 6, "Enforcement Ability": 5},
     6: {"Execution": 6, "Detail Precision": 6, "Loyalty": 8, "Politics Safe": 8, "Ownership": 8, "Communication": 6, "Analytical": 5, "Strategy": 5, "Authority": 6, "Dominance": 6, "Integrity": 9, "Emotional Stability": 8, "Aggression": 6, "Risk Appetite": 5, "Consistency": 8, "Obedience": 7, "Assertiveness": 6, "Enforcement Ability": 7},
-    7: {"Execution": 5, "Detail Precision": 6, "Loyalty": 4, "Politics Safe": 3, "Ownership": 5, "Communication": 3, "Analytical": 9, "Strategy": 7, "Authority": 4, "Dominance": 3, "Integrity": 9, "Emotional Stability": 8, "Aggression": 3, "Risk Appetite": 4, "Consistency": 6, "Obedience": 6, "Assertiveness": 4, "Enforcement Ability": 4},
-    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 9, "Politics Safe": 8, "Ownership": 9, "Communication": 6, "Analytical": 7, "Strategy": 6, "Authority": 9, "Dominance": 8, "Integrity": 8, "Emotional Stability": 9, "Aggression": 8, "Risk Appetite": 7, "Consistency": 9, "Obedience": 6, "Assertiveness": 8, "Enforcement Ability": 9},
+    7: {"Execution": 5, "Detail Precision": 6, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 4, "Analytical": 9, "Strategy": 7, "Authority": 4, "Dominance": 3, "Integrity": 9, "Emotional Stability": 8, "Aggression": 3, "Risk Appetite": 4, "Consistency": 6, "Obedience": 6, "Assertiveness": 4, "Enforcement Ability": 4},
+    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 7, "Politics Safe": 6, "Ownership": 8, "Communication": 6, "Analytical": 7, "Strategy": 6, "Authority": 9, "Dominance": 8, "Integrity": 7, "Emotional Stability": 8, "Aggression": 8, "Risk Appetite": 7, "Consistency": 9, "Obedience": 5, "Assertiveness": 8, "Enforcement Ability": 9},
     9: {"Execution": 7.5, "Detail Precision": 6, "Loyalty": 9, "Politics Safe": 9, "Ownership": 9, "Communication": 6, "Analytical": 8, "Strategy": 8, "Authority": 7, "Dominance": 7, "Integrity": 9, "Emotional Stability": 7, "Aggression": 7, "Risk Appetite": 8, "Consistency": 7, "Obedience": 5, "Assertiveness": 7, "Enforcement Ability": 7},
 }
 
 BIRTH_CORE_MATRIX: Dict[int, Dict[str, float]] = {
     1: {"Execution": 6, "Detail Precision": 5, "Loyalty": 5, "Politics Safe": 6, "Ownership": 7, "Communication": 8, "Analytical": 6, "Strategy": 9},
     2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 7, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
-    3: {"Execution": 4, "Detail Precision": 4, "Loyalty": 4, "Politics Safe": 4, "Ownership": 4, "Communication": 9, "Analytical": 4, "Strategy": 8},
-    4: {"Execution": 9, "Detail Precision": 9, "Loyalty": 9, "Politics Safe": 9, "Ownership": 8, "Communication": 4, "Analytical": 8, "Strategy": 4},
+    3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8},
+    4: {"Execution": 9, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 8, "Strategy": 4},
     5: {"Execution": 5, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6},
     6: {"Execution": 6, "Detail Precision": 6, "Loyalty": 8, "Politics Safe": 8, "Ownership": 8, "Communication": 6, "Analytical": 5, "Strategy": 5},
-    7: {"Execution": 5, "Detail Precision": 7, "Loyalty": 5, "Politics Safe": 4, "Ownership": 5, "Communication": 3, "Analytical": 9, "Strategy": 7},
-    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 9, "Politics Safe": 8, "Ownership": 9, "Communication": 6, "Analytical": 7, "Strategy": 6},
+    7: {"Execution": 5, "Detail Precision": 7, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 4, "Analytical": 9, "Strategy": 7},
+    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 7, "Politics Safe": 6, "Ownership": 8, "Communication": 6, "Analytical": 7, "Strategy": 6},
     9: {"Execution": 7, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 8, "Ownership": 8, "Communication": 7, "Analytical": 8, "Strategy": 8},
 }
 
 MONTH_CORE_MATRIX: Dict[int, Dict[str, float]] = {
     1: {"Execution": 7, "Detail Precision": 6, "Loyalty": 7, "Politics Safe": 7, "Ownership": 7, "Communication": 7, "Analytical": 6, "Strategy": 8},
     2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
-    3: {"Execution": 4, "Detail Precision": 4, "Loyalty": 4, "Politics Safe": 3, "Ownership": 4, "Communication": 9, "Analytical": 4, "Strategy": 8},
-    4: {"Execution": 8, "Detail Precision": 8, "Loyalty": 8, "Politics Safe": 9, "Ownership": 8, "Communication": 4, "Analytical": 7, "Strategy": 4},
-    5: {"Execution": 4, "Detail Precision": 4, "Loyalty": 4, "Politics Safe": 3, "Ownership": 4, "Communication": 7, "Analytical": 5, "Strategy": 6},
+    3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8},
+    4: {"Execution": 8, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 7, "Strategy": 4},
+    5: {"Execution": 4, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6},
     6: {"Execution": 6, "Detail Precision": 6, "Loyalty": 8, "Politics Safe": 8, "Ownership": 8, "Communication": 6, "Analytical": 5, "Strategy": 5},
-    7: {"Execution": 5, "Detail Precision": 6, "Loyalty": 3, "Politics Safe": 2, "Ownership": 5, "Communication": 3, "Analytical": 9, "Strategy": 7},
-    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 9, "Politics Safe": 8, "Ownership": 9, "Communication": 6, "Analytical": 7, "Strategy": 6},
+    7: {"Execution": 5, "Detail Precision": 6, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 4, "Analytical": 9, "Strategy": 7},
+    8: {"Execution": 8, "Detail Precision": 8, "Loyalty": 7, "Politics Safe": 6, "Ownership": 8, "Communication": 6, "Analytical": 7, "Strategy": 6},
     9: {"Execution": 7, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 8, "Ownership": 8, "Communication": 7, "Analytical": 8, "Strategy": 8},
 }
 
