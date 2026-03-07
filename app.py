@@ -315,13 +315,13 @@ def compute_risk_gate(composites: Dict[str, float], traits: Dict[str, float]) ->
     self_ownership = composites["Self Ownership"]
     discipline = traits["Discipline"]
 
-    if loyalty < 6.5:
+    if loyalty < 6.0:
         risk_flags.append("Low Loyalty")
-    if politics_safe < 6.5:
+    if politics_safe < 6.0:
         risk_flags.append("Political Risk")
-    if self_ownership < 6.5:
+    if self_ownership < 5.0:
         risk_flags.append("Low Self Ownership")
-    if discipline < 6:
+    if discipline < 5.0:
         risk_flags.append("Low Discipline")
 
     risk_status = "FAIL" if risk_flags else "PASS"
