@@ -48,7 +48,7 @@ ATTRIBUTE_KEYS = CORE_TRAITS + NEW_ATTRIBUTES
 
 DESTINY_MATRIX: Dict[int, Dict[str, float]] = {
     1: {"Execution": 6, "Detail Precision": 5, "Loyalty": 5, "Politics Safe": 5, "Ownership": 7, "Communication": 8, "Analytical": 6, "Strategy": 9, "Authority": 9, "Dominance": 9, "Integrity": 7, "Emotional Stability": 6, "Aggression": 8, "Risk Appetite": 9, "Consistency": 7, "Obedience": 4, "Assertiveness": 9, "Enforcement Ability": 8},
-    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 7, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5, "Authority": 4, "Dominance": 3, "Integrity": 8, "Emotional Stability": 5, "Aggression": 3, "Risk Appetite": 4, "Consistency": 7, "Obedience": 8, "Assertiveness": 4, "Enforcement Ability": 4},
+    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 8, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5, "Authority": 4, "Dominance": 3, "Integrity": 8, "Emotional Stability": 6, "Aggression": 3, "Risk Appetite": 4, "Consistency": 7, "Obedience": 9, "Assertiveness": 4, "Enforcement Ability": 4},
     3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8, "Authority": 5, "Dominance": 5, "Integrity": 6, "Emotional Stability": 5, "Aggression": 5, "Risk Appetite": 7, "Consistency": 5, "Obedience": 6, "Assertiveness": 6, "Enforcement Ability": 5},
     4: {"Execution": 9, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 8, "Strategy": 4, "Authority": 7, "Dominance": 7, "Integrity": 6, "Emotional Stability": 7, "Aggression": 8, "Risk Appetite": 6, "Consistency": 9, "Obedience": 4, "Assertiveness": 7, "Enforcement Ability": 8},
     5: {"Execution": 5, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6, "Authority": 5, "Dominance": 5, "Integrity": 5, "Emotional Stability": 5, "Aggression": 6, "Risk Appetite": 8, "Consistency": 4, "Obedience": 5, "Assertiveness": 6, "Enforcement Ability": 5},
@@ -60,7 +60,7 @@ DESTINY_MATRIX: Dict[int, Dict[str, float]] = {
 
 BIRTH_CORE_MATRIX: Dict[int, Dict[str, float]] = {
     1: {"Execution": 6, "Detail Precision": 5, "Loyalty": 5, "Politics Safe": 6, "Ownership": 7, "Communication": 8, "Analytical": 6, "Strategy": 9},
-    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 7, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
+    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 8, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
     3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8},
     4: {"Execution": 9, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 8, "Strategy": 4},
     5: {"Execution": 5, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6},
@@ -72,7 +72,7 @@ BIRTH_CORE_MATRIX: Dict[int, Dict[str, float]] = {
 
 MONTH_CORE_MATRIX: Dict[int, Dict[str, float]] = {
     1: {"Execution": 7, "Detail Precision": 6, "Loyalty": 7, "Politics Safe": 7, "Ownership": 7, "Communication": 7, "Analytical": 6, "Strategy": 8},
-    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 7, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
+    2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8, "Politics Safe": 8, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
     3: {"Execution": 5, "Detail Precision": 5, "Loyalty": 6, "Politics Safe": 6, "Ownership": 5, "Communication": 8, "Analytical": 5, "Strategy": 8},
     4: {"Execution": 8, "Detail Precision": 8, "Loyalty": 5, "Politics Safe": 4, "Ownership": 7, "Communication": 4, "Analytical": 7, "Strategy": 4},
     5: {"Execution": 4, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 5, "Ownership": 5, "Communication": 7, "Analytical": 5, "Strategy": 6},
