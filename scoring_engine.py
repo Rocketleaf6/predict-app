@@ -1,40 +1,14 @@
-#!/usr/bin/env python3
-"""Pure numerology scoring logic shared by apps."""
+destiny -
 
-from __future__ import annotations
+2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8.5, "Politics Safe": 8.5, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5, "Authority": 4, "Dominance": 3, "Integrity": 8, "Emotional Stability": 5, "Aggression": 3, "Risk Appetite": 4, "Consistency": 7, "Obedience": 8, "Assertiveness": 4, "Enforcement Ability": 4},
 
-from dataclasses import dataclass
-from datetime import datetime
-from typing import Dict, List, Tuple
+3: {"Execution": 4, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 4, "Ownership": 4, "Communication": 9, "Analytical": 4, "Strategy": 8, "Authority": 5, "Dominance": 5, "Integrity": 6, "Emotional Stability": 5, "Aggression": 5, "Risk Appetite": 7, "Consistency": 4, "Obedience": 5, "Assertiveness": 6, "Enforcement Ability": 4},
 
-TRAITS = [
-    "Execution",
-    "Detail Precision",
-    "Loyalty",
-    "Politics Safe",
-    "Ownership",
-    "Discipline",
-    "Communication",
-    "Analytical",
-    "Strategy",
-]
+birth  - 
 
-CORE_TRAITS = [
-    "Execution",
-    "Detail Precision",
-    "Loyalty",
-    "Politics Safe",
-    "Ownership",
-    "Discipline",
-    "Communication",
-    "Analytical",
-    "Strategy",
-]
+2: {"Execution": 5, "Detail Precision": 5, "Loyalty": 8.5, "Politics Safe": 8.5, "Ownership": 6, "Communication": 7, "Analytical": 5, "Strategy": 5},
 
-NEW_ATTRIBUTES = [
-    "Authority",
-    "Dominance",
-    "Integrity",
+3: {"Execution": 4, "Detail Precision": 4, "Loyalty": 5, "Politics Safe": 4, "Ownership": 4, "Communication": 9, "Analytical": 4, "Strategy": 8},    "Integrity",
     "Emotional Stability",
     "Aggression",
     "Risk Appetite",
